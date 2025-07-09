@@ -6,7 +6,6 @@ use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Livewire\Component;
 use Illuminate\Validation\Rule;
-use Spatie\Permission\Models\Role;
 
 class Index extends Component
 {
@@ -14,15 +13,12 @@ class Index extends Component
     public $name = '';
     public $email = '';
     public $password = '';
-    public $role = '';
-    public $roles = [];
 
     protected function rules()
     {
         return [
             'name' => ['required'],
             'email' => ['required', 'email', Rule::unique('users','email')->ignore($this->userId)],
-            'role' => ['required', Rule::in($this->roles)],
         ];
     }
 
@@ -30,8 +26,7 @@ class Index extends Component
     {
         $data = $this->validate();
         $data['password'] = Hash::make($this->password ?: 'password');
-        $user = User::create($data);
-        $user->assignRole($this->role);
+        User::create($data);
         $this->resetFields();
     }
 
@@ -41,7 +36,6 @@ class Index extends Component
         $this->userId = $user->id;
         $this->name = $user->name;
         $this->email = $user->email;
-        $this->role = $user->roles->pluck('name')->first();
     }
 
     public function update()
@@ -52,7 +46,6 @@ class Index extends Component
         if ($this->password) {
             $user->update(['password' => Hash::make($this->password)]);
         }
-        $user->syncRoles($this->role);
         $this->resetFields();
     }
 
@@ -64,16 +57,11 @@ class Index extends Component
     public function resetFields()
     {
         $this->reset('userId', 'name', 'email', 'password');
-        $this->role = '';
     }
 
     public function render()
     {
-        $this->roles = Role::pluck('name')->toArray();
-        return view('livewire.user.index', [
-            'users' => User::with('roles')->get(),
-            'roles' => $this->roles,
-        ])
+        return view('livewire.user.index', ['users' => User::all()])
             ->layout('layouts.adminlte', ['title' => 'Users']);
     }
 }
