@@ -312,8 +312,15 @@ return [
                     'route' => 'brands.index',
                     'icon' => 'fas fa-tag',
                 ],
+                [
+                    'text' => 'Categories',
+                    'route' => 'categories.index',
+                    'icon' => 'fas fa-tags',
+                ],
             ],
         ],
+        ['header' => 'SYSTEM'],
+        ['text' => 'Settings', 'route' => 'settings.index', 'icon' => 'fas fa-cog'],
     ],
 
     /*

@@ -8,6 +8,3 @@
     @endisset
 @endsection
 
-@section('content')
-    {{ $slot }}
-@endsection

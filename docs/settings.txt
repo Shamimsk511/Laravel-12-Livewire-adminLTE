@@ -1,0 +1,9 @@
+System settings allow you to configure global values that are shared across modules.
+
+Available keys:
+- shop_name: name of the shop displayed in invoices and headers.
+- currency: default currency code (e.g. USD).
+- address: company address shown on documents.
+
+Use the Settings menu to modify these values. Modules can retrieve them via the
+`setting('key')` helper, which caches results for better performance.
